@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TODO</title>
+		<style>
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+input[type=text], select {
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input[type=submit] {
+  width: 20%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+#style {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+/* Removes the clear button from date inputs */
+input[type="date"]::-webkit-clear-button {
+    display: none;
+}
+
+/* Removes the spin button */
+input[type="date"]::-webkit-inner-spin-button { 
+    display: none;
+}
+
+/* Always display the drop down caret */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #2c3e50;
+}
+
+/* A few custom styles for date inputs */
+input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    color: #95a5a6;
+    font-family: "Helvetica", arial, sans-serif;
+    font-size: 18px;
+    border:1px solid #ecf0f1;
+    background:#ecf0f1;
+    padding:5px;
+    display: inline-block !important;
+    visibility: visible !important;
+}
+
+input[type="date"], focus {
+    color: #95a5a6;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+body
+{
+background: #CE5937;
+background: -moz-linear-gradient(left, #CE5937 0%, #1C6EA4 50%, #C59237 100%);
+background: -webkit-linear-gradient(left, #CE5937 0%, #1C6EA4 50%, #C59237 100%);
+background: linear-gradient(to right, #CE5937 0%, #1C6EA4 50%, #C59237 
+
+}
+
+
+</style>
+	</head>
+	<body>
+	<div align="center"  ><h1 style="font-family:comic sans ms;">TODO</h1></div>
+	<div align="right" ><a href="http://127.0.0.1:5000/LeanKloudApp/"><button atype="button"  style="font-family:comic sans ms;">LOGOUT</button></a></div>
+<div class="tab">
+  <button style="font-family:comic sans ms;" class="tablinks" onclick="openCity(event, 'ADD')">ADD</button>
+  <button style="font-family:comic sans ms;" class="tablinks" onclick="openCity(event, 'SEARCH')">SEARCH</button>
+  <button style="font-family:comic sans ms;" class="tablinks" onclick="openCity(event, 'MODIFY')">MODIFY</button>
+  
+</div>	
+
+<div id="ADD" class="tabcontent">
+  <form action="/add" method="post" autocomplete="off">
+				
+				<input type="text" style="font-family:comic sans ms;" name="content" placeholder="Content"  required><br>
+				<input type="date" style="font-family:comic sans ms;" name="due_date"onload="getDate()" align="left"   required><br>
+				<input type="submit" style="font-family:comic sans ms;" value="ADD">
+			</form>
+</div>
+
+	
+
+
+<div id="SEARCH" class="tabcontent">
+  <form action="/search" method="post">
+	<input style="font-family:comic sans ms;" type="text" name="ID" placeholder="ID"  required><br>
+	<input style="font-family:comic sans ms;" type="submit" value="SEARCH">
+	<br>
+	<p id="s_result">
+	</p>
+	
+	</form>
+</div>
+
+<div id="MODIFY" class="tabcontent">
+  <form action="/modify" method="post">
+				<input style="font-family:comic sans ms;"  class="form_field" type="text" name="IDMOD" required><br>
+				<input  style="font-family:comic sans ms;" type="date" onload="getDate()" align="left" name="DueDateMOD" required><br>
+				<select style="font-family:comic sans ms;" name="OPTMOD">
+				<option style="font-family:comic sans ms;">Not Started</option>
+				<option style="font-family:comic sans ms;">In Progress</option>
+				<option style="font-family:comic sans ms;">Finished</option>
+				</select><br>
+				<center><input style="font-family:comic sans ms;" type="submit" value="UPDATE"></center>
+	</form>
+</div>
+
+
+
+
+
+<div class="msg">{{ msg }}</div>
+
+{% for d in results  %}
+	<h4 style="color:white;" >TODO-ID:<h2>{{d.id}}</h2></h4>
+	<h4 style="color:white;" >TODO-CONTENT:<h2>{{d.content}}</h2></h4>
+	<h4 style="color:white;" >DUE-DATE:<h2>{{d.due_by}}</h2></h4>
+	<h4 style="color:white;" >STATUS:<h2>{{d.status}}</h2></h4>
+	<br>
+{% endfor %}
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+</script>		
+	</body>
+</html>
